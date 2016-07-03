@@ -12,12 +12,22 @@ class TyposcriptrCommand(sublime_plugin.TextCommand):
 				# Example: "page.10.template.value = hello world"
 				matchObj = re.match(r'.*\s*(=|<|=<|>)\s*[^\s]*\s*$', string, re.M)
 				if (matchObj):
+					if region.end() == line.end():
+						print ("* Case 1a: line containing TypoScript operator and cursor at end of it")
+					else:
+						print ("* Case 1b: line containing TypoScript operator and cursor within line")
+
 					newLine = re.split(r'(=|<|=<|>)', string)
 					newLine = '\n' + newLine[0].rstrip()
 
 					# Insert: "page.10.template.value"
 					self.view.insert(edit, line.end(), newLine)
 				else:
+					if region.end() == line.end():
+						print ("* Case 2a: line not containing TypoScript operator and cursor at end of it")
+					else:
+						print ("* Case 2b: line not containing TypoScript operator and cursor within line")
+
 					matchObj = re.match(r'(\s*)(\w*).*$', string, re.M)
 					whitespaces = matchObj.group(1)
 					#print ("Whitespace found: '" + whitespaces + "'")
