@@ -2,7 +2,7 @@ import sublime, sublime_plugin, re
 
 class TyposcriptrCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
-		for region in self.view.sel():
+		for counter, region in enumerate(self.view.sel()):
 			if region.empty():
 				# Beginning and end of this line, e.g.: (0, 30)
 				line = self.view.line(region)
@@ -26,8 +26,11 @@ class TyposcriptrCommand(sublime_plugin.TextCommand):
 					# Append: " {LINEBREAK TABS TAB LINEBREAK TABS}"
 					self.view.insert(edit, line.end(), newLines)
 
+					# Refresh region since we just shifted its coordinates with the previous command
+					region = self.view.sel()[counter]
+
 					# Cursor re-positioning after second LINEBREAK
-					pos = self.view.sel()[0].begin()
+					pos = region.begin()
 					pos = pos - len(whitespaces) - 2
-					self.view.sel().clear()
+					self.view.sel().subtract(region)
 					self.view.sel().add(pos)
