@@ -10,7 +10,7 @@ class TyposcriptrCommand(sublime_plugin.TextCommand):
 				print ("TypoScriptr processing this string: '" + string + "'")
 
 				# Example: "page.10.template.value = hello world"
-				matchObj = re.match(r'.*\s*(=|<|=<|>)\s*[^\s]*\s*$', string, re.M)
+				matchObj = re.match(r'.*\s*(=|<|=<|>)\s*.*$', string, re.M)
 				if (matchObj):
 					if region.end() == line.end():
 						print ("* Case 1a: line containing TypoScript operator and cursor at end of it")
